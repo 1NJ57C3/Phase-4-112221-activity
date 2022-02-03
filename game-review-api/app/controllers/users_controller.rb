@@ -7,6 +7,22 @@ class UsersController < ApplicationController
     render json: {errors: invalid.record.errors}, status: :unprocessable_entity
  end 
 
+ def destroy
+   user = User.find(params[:id])
+   user.destroy
+   head :no_content
+ rescue ActiveRecord::RecordInvalid => invalid
+   render json: { invalid.record.errors.full_messages }, status: :not_found
+ end
+
+ def update
+   user = User.find(params[:id])
+   user.update!(user_params)
+   render json: user, status: :ok
+ rescue ActiveRecord::RecordInvalid => invalid
+   render json: { invalid.record.errors.full_messages }, status: :unprocessable_entity
+ end
+
  private
  
  def user_params
