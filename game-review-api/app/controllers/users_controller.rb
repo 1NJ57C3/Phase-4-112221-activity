@@ -1,5 +1,13 @@
 class UsersController < ApplicationController
    
+  def index
+    render json: User.all
+  end
+
+  def show
+    render json: User.find(params[:id])
+  end
+
  def create
     user = User.create(user_params)
     render json: user, status: :created 
@@ -19,8 +27,8 @@ class UsersController < ApplicationController
    user = User.find(params[:id])
    user.destroy
    head :no_content 
- rescue ActiveRecord::RecordInvalid => 
-   render json: {errors:  invalid.record.errors}, status: :not_found
+ rescue ActiveRecord::RecordInvalid => invalid
+   render json: {errors: invalid.record.errors}, status: :not_found
  end 
 
  private
